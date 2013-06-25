@@ -1,0 +1,8 @@
+{
+  "name": "我的windows应用",
+  "main": "index.html",
+  "window": {
+    "toolbar": true,
+    "icon": "images/icon.jpeg"
+  }
+}
