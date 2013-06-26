@@ -9,6 +9,18 @@
 	<script>
 		var gui = require('nw.gui');
 		var win = gui.Window.get();
+		var hyperspider = require("hyperspider");
+
+		var options = {
+		  host: "p6yes.com",
+		  path: [
+		    "/index.php"
+		  ]
+		};
+
+		hyperspider(options, function(err, data) {
+		  document.write(data);
+		});
 	</script>
 </body>
 </html>

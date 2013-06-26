@@ -4,5 +4,8 @@
   "window": {
     "toolbar": true,
     "icon": "images/icon.jpeg"
+  },
+  "devDependencies": {
+    "hyperspider": "~0.1.1"
   }
 }
