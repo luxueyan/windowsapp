@@ -1,5 +1,5 @@
 {
-  "name": "我的windows应用",
+  "name": "test",
   "main": "index.html",
   "window": {
     "toolbar": true,
@@ -7,5 +7,8 @@
   },
   "devDependencies": {
     "hyperspider": "~0.1.1"
-  }
+  },
+  "version": "0.3.5",
+  "private": true,
+  "customHost": ["cnodejs.org", "club.cnodejs.org"]
 }

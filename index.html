@@ -6,21 +6,45 @@
 </head>
 <body>
 	<h1>你好啊</h1>
+	<script src="js/jquery-1.9.1.min.js"></script>
+	<script src="js/template.min.js"></script>
 	<script>
 		var gui = require('nw.gui');
 		var win = gui.Window.get();
-		var hyperspider = require("hyperspider");
+		win.maximize();
+		var Crawler = require("crawler").Crawler;
 
-		var options = {
-		  host: "p6yes.com",
-		  path: [
-		    "/index.php"
-		  ]
-		};
-
-		hyperspider(options, function(err, data) {
-		  document.write(data);
+		var c = new Crawler({
+		    "maxConnections":10,
+		    "jQuery":false,
+		    "forceUTF8": true,
+		    // This will be called for each crawled page
+		    "callback":function(error,result) {
+		       // var tableReg = /<table.*width="99%">([\s\S](?!<table))*<\/table>/g
+		       // var table = result.body.match(tableReg);
+		       // if(table){
+			      //  console.log($(table[0]).find('a')); 
+		       // }
+		    }
 		});
+		// Queue just one URL, with default callback
+		// c.queue("http://www.p6yes.com/index.php");
+		//自拍公共区
+		c.queue([{
+		    "uri":"http://www.p6yes.com/thread.php?fid=39",
+		    
+		    // The global callback won't be called
+		    "callback":function(error,result) {
+		        var tableReg = /<table .* id="ajaxtable">([\s\S](?!<table))*<\/table>/g
+		        var table = result.body.match(tableReg);
+		        if(table){
+			        var listHref = $(table[0]).find('tr.cbg').last().nextAll('tr').find('td:eq(1) a').map(function(){
+			        	return 'http://www.p6yes.com/' + $(this).attr('href');
+			        }).get();
+			        console.log(c.queue(listHref));
+		        }
+		    }
+		}]);
 	</script>
 </body>
 </html>
