@@ -6,9 +6,13 @@
     "icon": "images/icon.jpeg"
   },
   "devDependencies": {
-    "hyperspider": "~0.1.1"
+    "hyperspider": "~0.1.1",
+    "crawler": "~0.2.4"
   },
   "version": "0.3.5",
   "private": true,
-  "customHost": ["cnodejs.org", "club.cnodejs.org"]
+  "customHost": [
+    "cnodejs.org",
+    "club.cnodejs.org"
+  ]
 }

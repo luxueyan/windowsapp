@@ -5,7 +5,12 @@
 	<title>windows 测试程序</title>
 </head>
 <body>
-	<h1>你好啊</h1>
+	<div id="container">
+		
+	</div>
+	<script type="text/tmpl" id="tmpl-image">
+
+	</script>
 	<script src="js/jquery-1.9.1.min.js"></script>
 	<script src="js/template.min.js"></script>
 	<script>
@@ -20,11 +25,11 @@
 		    "forceUTF8": true,
 		    // This will be called for each crawled page
 		    "callback":function(error,result) {
-		       // var tableReg = /<table.*width="99%">([\s\S](?!<table))*<\/table>/g
-		       // var table = result.body.match(tableReg);
-		       // if(table){
-			      //  console.log($(table[0]).find('a')); 
-		       // }
+		       var contentReg = /<span.*class='tpc_content'[^>]*>([\s\S](?!<span))*<\/span>/g
+		       var content = result.body.match(contentReg);
+		       if(content){
+			       $(content); 
+		       }
 		    }
 		});
 		// Queue just one URL, with default callback
@@ -38,10 +43,10 @@
 		        var tableReg = /<table .* id="ajaxtable">([\s\S](?!<table))*<\/table>/g
 		        var table = result.body.match(tableReg);
 		        if(table){
-			        var listHref = $(table[0]).find('tr.cbg').last().nextAll('tr').find('td:eq(1) a').map(function(){
+			        var listHref = $(table[0]).find('tr.cbg').last().nextAll('tr').find('td:eq(1) a:eq(0)').map(function(){
 			        	return 'http://www.p6yes.com/' + $(this).attr('href');
 			        }).get();
-			        console.log(c.queue(listHref));
+			        c.queue(listHref[0]);
 		        }
 		    }
 		}]);
