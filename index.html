@@ -3,53 +3,124 @@
 <head>
 	<meta charset="UTF-8">
 	<title>windows 测试程序</title>
+	<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 	<div id="container">
 		
 	</div>
+	<div class="loadingMark"></div>
 	<script type="text/tmpl" id="tmpl-image">
-
+		{each list}
+			<a>
+				<img class="pic_a" src="{$value}" alt="">
+				<strong>{formatNumber($index,3)}</strong>
+			</a>
+		{/each}
+	</script>
+	<script type="text/tmpl" id="tmpl-column">
+		{each list}
+			<span id="column_{$index}" class="column"></span>
+		{/each}
 	</script>
 	<script src="js/jquery-1.9.1.min.js"></script>
 	<script src="js/template.min.js"></script>
+	<script src="js/template-syntax.js"></script>
 	<script>
-		var gui = require('nw.gui');
-		var win = gui.Window.get();
-		win.maximize();
-		var Crawler = require("crawler").Crawler;
-
-		var c = new Crawler({
-		    "maxConnections":10,
-		    "jQuery":false,
-		    "forceUTF8": true,
-		    // This will be called for each crawled page
-		    "callback":function(error,result) {
-		       var contentReg = /<span.*class='tpc_content'[^>]*>([\s\S](?!<span))*<\/span>/g
-		       var content = result.body.match(contentReg);
-		       if(content){
-			       $(content); 
-		       }
-		    }
+		$(function(){
+			template.helper('formatNumber',function(num,count){
+				return (new Array(count||3).join(0) + (waterColumns.imagesArray.length + num)).slice(-3);
+			});
+			var gui = require('nw.gui');
+			var win = gui.Window.get();
+			win.maximize();
+			var Crawler = require("crawler").Crawler;
+			var waterColumns = {
+				block:false,
+				nowColumnIndex: 0,
+				nowItemIndex:-1,
+				nowPageIndex:0,
+				pagesArray:[],
+				imagesArray:[],
+				count: 4,
+				crawler: null,
+				append: function(imgs){
+					var length = imgs.length;
+					[].push.apply(this.imagesArray,imgs);
+					var html = template.render('tmpl-image',{list:imgs});
+					$(html).each(function(i,e){
+						$('#column_' + i % this.count).append(e);
+					});
+					this.nowColumnIndex = imagesArray.length % this.count;
+				},
+				init: function(){
+					var that = this;
+					var count = window.innerWidth/330 | 0;
+					this.count = count;
+					var waters = template.render('tmpl-column',{list:('11111111111'.slice(0,this.count).split(''))});
+					$('#container').append(waters);
+					var c = new Crawler({
+					    "maxConnections":10,
+					    "jQuery":false,
+					    "forceUTF8": true,
+					    // This will be called for each crawled page
+					    "callback":function(error,result) {
+					       var contentReg = /<span.*class='tpc_content'[^>]*>([\s\S](?!<span))*<\/span>/g
+					       var content = result.body.match(contentReg);
+					       if(content){
+						       	var imgs = $(content[0]).find('img').map(function(){
+						       		return $(this).attr('src');
+						       	}).get();
+						       	that.block = false;
+						       	that.nowItemIndex += 1;
+						       	that.append(imgs);
+					       }
+					    }
+					});
+					this.crawler = c;
+					return c;
+					
+				},
+				getItem : function(index,callback){
+					if(index < this.pagesArray.length) {
+						this.crawler.queue(this.pagesArray[index]);
+						callback && callback();
+					} else {
+						this.getPage(this.nowPageIndex + 1,callback);
+					}
+				},
+				getPage: function(page,callback){
+					//自拍公共区
+					var that = this;
+					this.crawler.queue([{
+					    "uri":"http://www.p6yes.com/thread.php?fid=39&page=" + page,
+					    "callback":function(error,result) {
+					        var tableReg = /<table .* id="ajaxtable">([\s\S](?!<table))*<\/table>/g
+					        var table = result.body.match(tableReg);
+					        if(table){
+						        var listHref = $(table[0]).find('tr.cbg').last().nextAll('tr').find('td:eq(1) a:eq(0)').map(function(){
+						        	return 'http://www.p6yes.com/' + $(this).attr('href');
+						        }).get();
+						        [].push.apply(waterColumns.pagesArray,listHref);
+						        that.nowPageIndex += 1;
+						        that.crawler.queue(listHref[0]);
+					        }
+					    }
+					}]);
+				}
+			};
+			waterColumns.init();
+			$('.loadingMark').bind('slideMore',function(){
+				waterColumns.block = true;
+				waterColumns.getItem(waterColumns.nowItemIndex+1);
+			});
+			setInterval(function(){
+				if(window.innerHeight + $(window).scrollTop() > $('.loadingMark').position().top && !waterColumns.block){
+					console.log('trigger slidermore');
+				}
+			},300);
+			
 		});
-		// Queue just one URL, with default callback
-		// c.queue("http://www.p6yes.com/index.php");
-		//自拍公共区
-		c.queue([{
-		    "uri":"http://www.p6yes.com/thread.php?fid=39",
-		    
-		    // The global callback won't be called
-		    "callback":function(error,result) {
-		        var tableReg = /<table .* id="ajaxtable">([\s\S](?!<table))*<\/table>/g
-		        var table = result.body.match(tableReg);
-		        if(table){
-			        var listHref = $(table[0]).find('tr.cbg').last().nextAll('tr').find('td:eq(1) a:eq(0)').map(function(){
-			        	return 'http://www.p6yes.com/' + $(this).attr('href');
-			        }).get();
-			        c.queue(listHref[0]);
-		        }
-		    }
-		}]);
 	</script>
 </body>
 </html>
