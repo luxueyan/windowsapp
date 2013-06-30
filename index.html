@@ -83,11 +83,6 @@
 					var con = $('<div>').html(html);
 					con.find('a').each(function(i,e){
 						$(e).imgBoxer();
-						$(e).on('mouseenter',function(){
-							$(this).addClass('show-title');
-						}).on('mouseleave',function(){
-							$(this).removeClass('show-title');
-						});
 						$('#column_' + (that.nowColumnIndex + i) % that.count).append(e);
 					});
 					[].push.apply(this.imagesArray,imgs);

@@ -59,7 +59,7 @@ body {
 	overflow: hidden;
 	line-height: 2em;
 }
-#container .pic_a.show-title .title{
+.pic_a:hover .title{
 	height:auto;
 }
 .pic_a img {
