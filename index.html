@@ -200,7 +200,7 @@
 						if(page == 1){
 							uri = that.uri;
 						} else {
-							var uri = that.uri.replace(/(\d+).html/g,"$1" + "_page");
+							var uri = that.uri.replace(/(\d+).html/g,"$1" + "_" + page + '.html');
 						}
 						this.crawler.queue([{
 						    "uri": uri,
