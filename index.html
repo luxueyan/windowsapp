@@ -6,15 +6,34 @@
 	<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+	<nav id="tabs">
+		<a class="sel" href="http://www.p6yes.com/thread.php?fid=39">自拍公共区</a>
+		<a href="http://www.p6yes.com/thread.php?fid=40">激情公共区</a>
+		<a href="http://www.p6yes.com/thread.php?fid=25">新手绣图区</a>
+		<a href="http://www.qqq115.com/html/part/9.html">自拍偷拍</a>
+		<a href="http://www.qqq115.com/html/part/10.html">亚洲色图</a>
+		<a href="http://www.qqq115.com/html/part/11.html">欧美色图</a>
+		<a href="http://www.qqq115.com/html/part/12.html">美腿丝袜</a>
+		<a href="http://www.qqq115.com/html/part/13.html">清纯唯美</a>
+		<a href="http://www.qqq115.com/html/part/14.html">乱伦熟女</a>
+		<a href="http://www.qqq115.com/html/part/15.html">卡通动漫</a>
+		<a href="http://www.qqq115.com/html/part/16.html">综合色图</a>
+	</nav>
 	<div id="container">
 		
 	</div>
-	<div class="loadingMark"></div>
+	<div class="loadingMark">
+		<div class="circle">
+		</div>
+		<div class="circle1">
+		</div>
+	</div>
 	<script type="text/tmpl" id="tmpl-image">
 		{each list}
-			<a>
-				<img class="pic_a" src="{$value}" alt="">
+			<a class="pic_a">
+				<img src="{$value.src}" title="{$value.title}" alt="" index="{getIndex($index)}">
 				<strong>{formatNumber($index,3)}</strong>
+				<span class="title">{$value.title}</span>
 			</a>
 		{/each}
 	</script>
@@ -26,8 +45,13 @@
 	<script src="js/jquery-1.9.1.min.js"></script>
 	<script src="js/template.min.js"></script>
 	<script src="js/template-syntax.js"></script>
+	<script src="js/jquery-myplugin.js"></script>
 	<script>
 		$(function(){
+			
+			template.helper('getIndex',function(num){
+				return waterColumns.imagesArray.length + num;
+			});
 			template.helper('formatNumber',function(num,count){
 				return (new Array(count||3).join(0) + (waterColumns.imagesArray.length + num)).slice(-3);
 			});
@@ -36,87 +60,221 @@
 			win.maximize();
 			var Crawler = require("crawler").Crawler;
 			var waterColumns = {
-				block:false,
-				nowColumnIndex: 0,
-				nowItemIndex:-1,
-				nowPageIndex:0,
-				pagesArray:[],
-				imagesArray:[],
+				block: false,
+				uri:"http://www.p6yes.com/thread.php?fid=39",
+				cacheData:[],
 				count: 4,
-				crawler: null,
-				append: function(imgs){
-					var length = imgs.length;
-					[].push.apply(this.imagesArray,imgs);
-					var html = template.render('tmpl-image',{list:imgs});
-					$(html).each(function(i,e){
-						$('#column_' + i % this.count).append(e);
-					});
-					this.nowColumnIndex = imagesArray.length % this.count;
+				cacheDataSave: function(key){
+					if(key){
+						this.cacheData[key] = {
+							nowColumnIndex : this.nowColumnIndex,
+							nowItemIndex : this.nowItemIndex,
+							nowPageIndex : this.nowPageInde,
+							itemsArray : this.itemsArray,
+							imagesArray : this.imagesArray
+						};
+					}
 				},
-				init: function(){
+				crawler: Crawler,
+				append: function(imgs){
+					var that = this;
+					var length = imgs.length;
+					var html = template.render('tmpl-image',{list:imgs});
+					var con = $('<div>').html(html);
+					con.find('a').each(function(i,e){
+						$(e).imgBoxer();
+						$(e).on('mouseenter',function(){
+							$(this).addClass('show-title');
+						}).on('mouseleave',function(){
+							$(this).removeClass('show-title');
+						});
+						$('#column_' + (that.nowColumnIndex + i) % that.count).append(e);
+					});
+					[].push.apply(this.imagesArray,imgs);
+					this.nowColumnIndex = this.imagesArray.length % this.count;
+				},
+				init: function(cacheData){
+					var defaultData = {
+						nowColumnIndex :  0,
+						nowItemIndex : -1,
+						nowPageIndex : 0,
+						itemsArray : [],
+						imagesArray : []
+					};
+					cacheData = $.extend(defaultData, cacheData || {});
 					var that = this;
 					var count = window.innerWidth/330 | 0;
 					this.count = count;
+					this.nowColumnIndex = 0;
+					this.nowItemIndex = cacheData['nowItemIndex'];
+					this.nowPageIndex = cacheData['nowPageIndex'];
+					this.itemsArray = cacheData['itemsArray'];
+					this.imagesArray = [];
 					var waters = template.render('tmpl-column',{list:('11111111111'.slice(0,this.count).split(''))});
-					$('#container').append(waters);
-					var c = new Crawler({
-					    "maxConnections":10,
-					    "jQuery":false,
-					    "forceUTF8": true,
-					    // This will be called for each crawled page
-					    "callback":function(error,result) {
-					       var contentReg = /<span.*class='tpc_content'[^>]*>([\s\S](?!<span))*<\/span>/g
-					       var content = result.body.match(contentReg);
-					       if(content){
-						       	var imgs = $(content[0]).find('img').map(function(){
-						       		return $(this).attr('src');
-						       	}).get();
-						       	that.block = false;
+					$('#container').html(waters);
+					if(cacheData['imagesArray'].length){
+						this.append(cacheData['imagesArray']);
+					}
+					if(that.uri.indexOf('www.qqq115.com') > -1){
+						var c = new Crawler({
+						    "maxConnections":10,
+						    "jQuery":false,
+						    "forceUTF8": true,
+						    // This will be called for each crawled page
+						    "callback":function(error,result) {
+						    	var titleReg = /<div class="title">([^<]*)<\/div>/
+						        var contentReg = /<div class="content">[\s\S]*<\/div>/g
+						        try{
+							        var content = result.body.match(contentReg);
+							        var title = result.body.match(titleReg);
+						        }catch(e){
+						        	
+						        }
+						        if(content){
+							       	var imgs = $(content[0]).find('.n_bd img').map(function(){
+							       		return { src: $(this).attr('src'),title: title[1] || '' };
+							       	}).get();
+							       	
+							       	that.append(imgs);
+						        }
+					        	that.block = false;
 						       	that.nowItemIndex += 1;
-						       	that.append(imgs);
-					       }
-					    }
-					});
-					this.crawler = c;
+						    }
+						});
+						this.crawler = c;
+					} else {
+						var c = new Crawler({
+						    "maxConnections":10,
+						    "jQuery":false,
+						    "forceUTF8": true,
+						    // This will be called for each crawled page
+						    "callback":function(error,result) {
+						    	var titleReg = /<b>本页主题:<\/b>([^<]*)/
+						        var contentReg = /<span.*class='tpc_content'[^>]*>([\s\S](?!<span))*<\/span>/g
+						        var content = result.body.match(contentReg);
+						        var title = result.body.match(titleReg);
+						        if(content){
+							       	var imgs = $(content[0]).find('img').map(function(){
+							       		return { src: $(this).attr('src'),title: title[1] || '' };
+							       	}).get();
+							       	that.block = false;
+							       	that.nowItemIndex += 1;
+							       	that.append(imgs);
+						        }
+						    }
+						});
+						c.queue([{
+							"uri":'http://www.p6yes.com/login.php',
+							"method":"post",
+							"form":{
+								pwuser:'hahaman',
+								pwpwd:'881123',
+								hideid:'0',
+								cktime:'31536000',
+								jumpurl:"http://www.p6yes.com/index.php",
+								step:2
+							},
+							callback: function(error,result){
+								// console.log(result);
+							}
+						}])
+						this.crawler = c;
+					}
 					return c;
 					
 				},
 				getItem : function(index,callback){
-					if(index < this.pagesArray.length) {
-						this.crawler.queue(this.pagesArray[index]);
+					if(index < this.itemsArray.length) {
+						this.crawler.queue(this.itemsArray[index]);
 						callback && callback();
 					} else {
 						this.getPage(this.nowPageIndex + 1,callback);
 					}
 				},
 				getPage: function(page,callback){
+					// return;
 					//自拍公共区
 					var that = this;
-					this.crawler.queue([{
-					    "uri":"http://www.p6yes.com/thread.php?fid=39&page=" + page,
-					    "callback":function(error,result) {
-					        var tableReg = /<table .* id="ajaxtable">([\s\S](?!<table))*<\/table>/g
-					        var table = result.body.match(tableReg);
-					        if(table){
-						        var listHref = $(table[0]).find('tr.cbg').last().nextAll('tr').find('td:eq(1) a:eq(0)').map(function(){
-						        	return 'http://www.p6yes.com/' + $(this).attr('href');
-						        }).get();
-						        [].push.apply(waterColumns.pagesArray,listHref);
-						        that.nowPageIndex += 1;
-						        that.crawler.queue(listHref[0]);
-					        }
-					    }
-					}]);
+					if(that.uri.indexOf('www.qqq115.com') > -1){
+						
+						if(page == 1){
+							uri = that.uri;
+						} else {
+							var uri = that.uri.replace(/(\d+).html/g,"$1" + "_page");
+						}
+						this.crawler.queue([{
+						    "uri": uri,
+						    "callback":function(error,result) {
+						        var tableReg = /<ul>([\s\S](?!<ul>))*<\/ul>/g
+						        var table = result.body.match(tableReg);
+						        if(table){
+							        var listHref = $(table[0]).find('li a').map(function(){
+							        	return 'http://www.qqq115.com/' + $(this).attr('href');
+							        }).get();
+							        $.each(listHref,function(i,e){
+							        	if(!~$.inArray(e,waterColumns.itemsArray)){
+							        		waterColumns.itemsArray.push(e);
+							        	}
+							        })
+							        that.nowPageIndex += 1;
+							        that.getItem(waterColumns.nowItemIndex+1);
+						        }
+						    }
+						}]);
+					} else {
+						this.crawler.queue([{
+						    "uri": that.uri + "&page=" + page,
+						    "callback":function(error,result) {
+						        var tableReg = /<table .* id="ajaxtable">([\s\S](?!<table))*<\/table>/g
+						        var table = result.body.match(tableReg);
+						        if(table){
+							        var listHref = $(table[0]).find('tr.cbg').last().nextAll('tr').find('td:eq(1) a:eq(0)').map(function(){
+							        	return 'http://www.p6yes.com/' + $(this).attr('href');
+							        }).get();
+							        $.each(listHref,function(i,e){
+							        	if(!~$.inArray(e,waterColumns.itemsArray)){
+							        		waterColumns.itemsArray.push(e);
+							        	}
+							        })
+							        that.nowPageIndex += 1;
+							        that.getItem(waterColumns.nowItemIndex+1);
+						        }
+						    }
+						}]);
+					}
 				}
 			};
+			$(document).on('keyup',function(e){
+				if(e.keyCode == 116){
+					location.reload();
+				}
+			});
+			$('#tabs').tabs({
+				beforeTab: function(callback){
+					if(!waterColumns.block){
+						var key = $('#tabs .sel').attr('href');
+						waterColumns.cacheDataSave(key);
+						callback && callback();
+					} else {
+						alert('加载中!请稍等');
+					}
+				},
+				callback: function(){
+					waterColumns.uri = $(this).attr('href');
+					waterColumns.init(waterColumns.cacheData[waterColumns.uri]);
+				}
+			});
 			waterColumns.init();
 			$('.loadingMark').bind('slideMore',function(){
 				waterColumns.block = true;
 				waterColumns.getItem(waterColumns.nowItemIndex+1);
 			});
 			setInterval(function(){
-				if(window.innerHeight + $(window).scrollTop() > $('.loadingMark').position().top && !waterColumns.block){
-					console.log('trigger slidermore');
+				var shortBoard = Math.min.apply(null,$('.column').map(function(){
+					return $(this).height();
+				}).get());
+				if(shortBoard - $(window).scrollTop() < window.innerHeight + 100 && !waterColumns.block){
+					$('.loadingMark').trigger('slideMore');
 				}
 			},300);
 			

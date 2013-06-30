@@ -2,11 +2,13 @@
   "name": "test",
   "main": "index.html",
   "window": {
-    "toolbar": true,
+    "toolbar": false,
+    "frame": true,
+    "width": "100%",
+    "height": "900",
     "icon": "images/icon.jpeg"
   },
   "devDependencies": {
-    "hyperspider": "~0.1.1",
     "crawler": "~0.2.4"
   },
   "version": "0.3.5",
