@@ -150,7 +150,7 @@
 						        var title = result.body.match(titleReg);
 						        if(content){
 							       	var imgs = $(content[0]).find('img').map(function(){
-							       		return { src: $(this).attr('src'),title: title[1] || '' };
+							       		return { src: $(this).attr('src'),title: title ? title[1] : '' };
 							       	}).get();
 							       	that.append(imgs);
 						        }
@@ -230,7 +230,7 @@
 							        	return 'http://www.p6yes.com/' + $(this).attr('href');
 							        }).get();
 							        $.each(listHref,function(i,e){
-							        	if(!~$.inArray(e,waterColumns.itemsArray)){
+							        	if(!~$.inArray(e.replace(/&fpage=\d+/,''),waterColumns.itemsArray)){
 							        		waterColumns.itemsArray.push(e);
 							        	}
 							        })
