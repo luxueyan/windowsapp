@@ -2,7 +2,7 @@
   "name": "test",
   "main": "index.html",
   "window": {
-    "toolbar": false,
+    "toolbar": true,
     "frame": true,
     "width": "100%",
     "height": "900",

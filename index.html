@@ -10,14 +10,14 @@
 		<a class="sel" href="http://www.p6yes.com/thread.php?fid=39">自拍公共区</a>
 		<a href="http://www.p6yes.com/thread.php?fid=40">激情公共区</a>
 		<a href="http://www.p6yes.com/thread.php?fid=25">新手绣图区</a>
-		<a href="http://www.qqq115.com/html/part/9.html">自拍偷拍</a>
-		<a href="http://www.qqq115.com/html/part/10.html">亚洲色图</a>
-		<a href="http://www.qqq115.com/html/part/11.html">欧美色图</a>
-		<a href="http://www.qqq115.com/html/part/12.html">美腿丝袜</a>
-		<a href="http://www.qqq115.com/html/part/13.html">清纯唯美</a>
-		<a href="http://www.qqq115.com/html/part/14.html">乱伦熟女</a>
-		<a href="http://www.qqq115.com/html/part/15.html">卡通动漫</a>
-		<a href="http://www.qqq115.com/html/part/16.html">综合色图</a>
+		<a href="http://www.qqq116.com/html/part/9.html">自拍偷拍</a>
+		<a href="http://www.qqq116.com/html/part/10.html">亚洲色图</a>
+		<a href="http://www.qqq116.com/html/part/11.html">欧美色图</a>
+		<a href="http://www.qqq116.com/html/part/12.html">美腿丝袜</a>
+		<a href="http://www.qqq116.com/html/part/13.html">清纯唯美</a>
+		<a href="http://www.qqq116.com/html/part/14.html">乱伦熟女</a>
+		<a href="http://www.qqq116.com/html/part/15.html">卡通动漫</a>
+		<a href="http://www.qqq116.com/html/part/16.html">综合色图</a>
 	</nav>
 	<div id="container">
 		
@@ -83,10 +83,16 @@
 					var con = $('<div>').html(html);
 					con.find('a').each(function(i,e){
 						$(e).imgBoxer();
-						$('#column_' + (that.nowColumnIndex + i) % that.count).append(e);
+						var heightIndex = $('.column').map(function(i,e){
+							return $(e).height()*100 + i;
+						});
+						var index = Math.min.apply(null,heightIndex) % 100;
+						// alert(index);
+						$('#column_' + index).append(e);
+						// $('#column_' + (that.nowColumnIndex + i) % that.count).append(e);
 					});
 					[].push.apply(this.imagesArray,imgs);
-					this.nowColumnIndex = this.imagesArray.length % this.count;
+					// this.nowColumnIndex = this.imagesArray.length % this.count;
 				},
 				init: function(cacheData){
 					var defaultData = {
@@ -110,7 +116,7 @@
 					if(cacheData['imagesArray'].length){
 						this.append(cacheData['imagesArray']);
 					}
-					if(that.uri.indexOf('www.qqq115.com') > -1){
+					if(that.uri.indexOf('www.qqq116.com') > -1){
 						var c = new Crawler({
 						    "maxConnections":10,
 						    "jQuery":false,
@@ -190,7 +196,7 @@
 					// return;
 					//自拍公共区
 					var that = this;
-					if(that.uri.indexOf('www.qqq115.com') > -1){
+					if(that.uri.indexOf('www.qqq116.com') > -1){
 						
 						if(page == 1){
 							uri = that.uri;
@@ -205,7 +211,7 @@
 						        that.nowPageIndex += 1;
 						        if(table){
 							        var listHref = $(table[0]).find('li a').map(function(){
-							        	return 'http://www.qqq115.com/' + $(this).attr('href');
+							        	return 'http://www.qqq116.com/' + $(this).attr('href');
 							        }).get();
 							        $.each(listHref,function(i,e){
 							        	if(!~$.inArray(e,waterColumns.itemsArray)){
