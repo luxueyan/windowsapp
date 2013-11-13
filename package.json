@@ -1,15 +1,15 @@
 {
-  "name": "test",
+  "name": "ps",
   "main": "index.html",
   "window": {
-    "toolbar": true,
+    "toolbar": false,
     "frame": true,
-    "width": "100%",
-    "height": "900",
     "icon": "images/icon.jpeg"
   },
   "devDependencies": {
-    "crawler": "~0.2.4"
+    "crawler": ">=0.2.4",
+    "grunt": "~0.4.1",
+    "grunt-node-webkit-builder": "~0.1.11"
   },
   "version": "0.3.5",
   "private": true,

@@ -9,3 +9,5 @@ coverage.html
 nw.pak
 *.nw
 *.dll
+.DS_Store
+node-webkit.app/

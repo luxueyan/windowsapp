@@ -7,17 +7,17 @@
 </head>
 <body>
 	<nav id="tabs">
-		<a class="sel" href="http://www.p6yes.com/thread.php?fid=39">自拍公共区</a>
-		<a href="http://www.p6yes.com/thread.php?fid=40">激情公共区</a>
-		<a href="http://www.p6yes.com/thread.php?fid=25">新手绣图区</a>
-		<a href="http://www.qqq116.com/html/part/9.html">自拍偷拍</a>
-		<a href="http://www.qqq116.com/html/part/10.html">亚洲色图</a>
-		<a href="http://www.qqq116.com/html/part/11.html">欧美色图</a>
-		<a href="http://www.qqq116.com/html/part/12.html">美腿丝袜</a>
-		<a href="http://www.qqq116.com/html/part/13.html">清纯唯美</a>
-		<a href="http://www.qqq116.com/html/part/14.html">乱伦熟女</a>
-		<a href="http://www.qqq116.com/html/part/15.html">卡通动漫</a>
-		<a href="http://www.qqq116.com/html/part/16.html">综合色图</a>
+		<a class="sel" href="http://www.p6we.com/thread.php?fid=39">一区</a>
+		<a href="http://www.p6we.com/thread.php?fid=40">二区</a>
+		<a href="http://www.p6we.com/thread.php?fid=25">三区</a>
+		<a href="http://www.qqq116.com/html/part/9.html">四区</a>
+		<a href="http://www.qqq116.com/html/part/10.html">五区</a>
+		<a href="http://www.qqq116.com/html/part/11.html">六区</a>
+		<a href="http://www.qqq116.com/html/part/12.html">七区</a>
+		<a href="http://www.qqq116.com/html/part/13.html">八区</a>
+		<a href="http://www.qqq116.com/html/part/14.html">九区</a>
+		<a href="http://www.qqq116.com/html/part/15.html">十区</a>
+		<a href="http://www.qqq116.com/html/part/16.html">十一区</a>
 	</nav>
 	<div id="container">
 		
@@ -61,7 +61,7 @@
 			var Crawler = require("crawler").Crawler;
 			var waterColumns = {
 				block: false,
-				uri:"http://www.p6yes.com/thread.php?fid=39",
+				uri:"http://www.p6we.com/thread.php?fid=39",
 				cacheData:[],
 				count: 4,
 				cacheDataSave: function(key){
@@ -104,7 +104,8 @@
 					};
 					cacheData = $.extend(defaultData, cacheData || {});
 					var that = this;
-					var count = window.innerWidth/330 | 0;
+					var count = window.screen.width/330 | 0;
+					// console.log(window.screen.width);
 					this.count = count;
 					this.nowColumnIndex = 0;
 					this.nowItemIndex = cacheData['nowItemIndex'];
@@ -165,14 +166,14 @@
 						    }
 						});
 						c.queue([{
-							"uri":'http://www.p6yes.com/login.php',
+							"uri":'http://www.p6we.com/login.php',
 							"method":"post",
 							"form":{
 								pwuser:'hahaman',
 								pwpwd:'881123',
 								hideid:'0',
 								cktime:'31536000',
-								jumpurl:"http://www.p6yes.com/index.php",
+								jumpurl:"http://www.p6we.com/index.php",
 								step:2
 							},
 							callback: function(error,result){
@@ -233,7 +234,7 @@
 						        that.nowPageIndex += 1;
 						        if(table){
 							        var listHref = $(table[0]).find('tr.cbg').last().nextAll('tr').find('td:eq(1) a:eq(0)').map(function(){
-							        	return 'http://www.p6yes.com/' + $(this).attr('href');
+							        	return 'http://www.p6we.com/' + $(this).attr('href');
 							        }).get();
 							        $.each(listHref,function(i,e){
 							        	if(!~$.inArray(e.replace(/&fpage=\d+/,''),waterColumns.itemsArray)){
