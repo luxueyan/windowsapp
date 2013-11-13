@@ -83,16 +83,16 @@
 					var con = $('<div>').html(html);
 					con.find('a').each(function(i,e){
 						$(e).imgBoxer();
-						var heightIndex = $('.column').map(function(i,e){
-							return $(e).height()*100 + i;
-						});
-						var index = Math.min.apply(null,heightIndex) % 100;
+						// var heightIndex = $('.column').map(function(i,e){
+						// 	return $(e).height()*100 + i;
+						// });
+						// var index = Math.min.apply(null,heightIndex) % 100;
 						// alert(index);
-						$('#column_' + index).append(e);
-						// $('#column_' + (that.nowColumnIndex + i) % that.count).append(e);
+						// $('#column_' + index).append(e);
+						$('#column_' + (that.nowColumnIndex + i) % that.count).append(e);
 					});
 					[].push.apply(this.imagesArray,imgs);
-					// this.nowColumnIndex = this.imagesArray.length % this.count;
+					this.nowColumnIndex = this.imagesArray.length % this.count;
 				},
 				init: function(cacheData){
 					var defaultData = {
