@@ -10,14 +10,14 @@
 		<a class="sel" href="http://www.p6we.com/thread.php?fid=39">一区</a>
 		<a href="http://www.p6we.com/thread.php?fid=40">二区</a>
 		<a href="http://www.p6we.com/thread.php?fid=25">三区</a>
-		<a href="http://www.qqq116.com/html/part/9.html">四区</a>
-		<a href="http://www.qqq116.com/html/part/10.html">五区</a>
-		<a href="http://www.qqq116.com/html/part/11.html">六区</a>
-		<a href="http://www.qqq116.com/html/part/12.html">七区</a>
-		<a href="http://www.qqq116.com/html/part/13.html">八区</a>
-		<a href="http://www.qqq116.com/html/part/14.html">九区</a>
-		<a href="http://www.qqq116.com/html/part/15.html">十区</a>
-		<a href="http://www.qqq116.com/html/part/16.html">十一区</a>
+		<a href="http://www.aasoso.com/html/part/9.html">四区</a>
+		<a href="http://www.aasoso.com/html/part/10.html">五区</a>
+		<a href="http://www.aasoso.com/html/part/11.html">六区</a>
+		<a href="http://www.aasoso.com/html/part/12.html">七区</a>
+		<a href="http://www.aasoso.com/html/part/13.html">八区</a>
+		<a href="http://www.aasoso.com/html/part/14.html">九区</a>
+		<a href="http://www.aasoso.com/html/part/15.html">十区</a>
+		<a href="http://www.aasoso.com/html/part/16.html">十一区</a>
 	</nav>
 	<div id="container">
 		
@@ -117,15 +117,15 @@
 					if(cacheData['imagesArray'].length){
 						this.append(cacheData['imagesArray']);
 					}
-					if(that.uri.indexOf('www.qqq116.com') > -1){
+					if(that.uri.indexOf('www.aasoso.com') > -1){
 						var c = new Crawler({
 						    "maxConnections":10,
 						    "jQuery":false,
 						    "forceUTF8": true,
 						    // This will be called for each crawled page
 						    "callback":function(error,result) {
-						    	var titleReg = /<div class="title">([^<]*)<\/div>/
-						        var contentReg = /<div class="content">[\s\S]*<\/div>/g
+						    	var titleReg = /<title>([^<]*)<\/title>/
+						        var contentReg = /<div class="picContent">[\s\S]*<\/div>/g
 						        try{
 							        var content = result.body.match(contentReg);
 							        var title = result.body.match(titleReg);
@@ -133,7 +133,7 @@
 						        	
 						        }
 						        if(content){
-							       	var imgs = $(content[0]).find('.n_bd img').map(function(){
+							       	var imgs = $(content[0]).find('img').map(function(){
 							       		return { src: $(this).attr('src'),title: title[1] || '' };
 							       	}).get();
 							       	
@@ -197,7 +197,7 @@
 					// return;
 					//自拍公共区
 					var that = this;
-					if(that.uri.indexOf('www.qqq116.com') > -1){
+					if(that.uri.indexOf('www.aasoso.com') > -1){
 						
 						if(page == 1){
 							uri = that.uri;
@@ -207,12 +207,12 @@
 						this.crawler.queue([{
 						    "uri": uri,
 						    "callback":function(error,result) {
-						        var tableReg = /<ul>([\s\S](?!<ul>))*<\/ul>/g
+						        var tableReg = /<ul[\s\S]*>([\s\S](?!<ul>))*<\/ul>/g
 						        var table = result.body.match(tableReg);
 						        that.nowPageIndex += 1;
 						        if(table){
 							        var listHref = $(table[0]).find('li a').map(function(){
-							        	return 'http://www.qqq116.com/' + $(this).attr('href');
+							        	return 'http://www.aasoso.com/' + $(this).attr('href');
 							        }).get();
 							        $.each(listHref,function(i,e){
 							        	if(!~$.inArray(e,waterColumns.itemsArray)){
