@@ -7,9 +7,9 @@
 </head>
 <body>
 	<nav id="tabs">
-		<a class="sel" href="http://www.p6we.com/thread.php?fid=39">一区</a>
-		<a href="http://www.p6we.com/thread.php?fid=40">二区</a>
-		<a href="http://www.p6we.com/thread.php?fid=25">三区</a>
+		<a class="sel" href="http://www.p6us.com/thread.php?fid=39">一区</a>
+		<a href="http://www.p6us.com/thread.php?fid=40">二区</a>
+		<a href="http://www.p6us.com/thread.php?fid=25">三区</a>
 		<a href="http://www.aasoso.com/html/part/9.html">四区</a>
 		<a href="http://www.aasoso.com/html/part/10.html">五区</a>
 		<a href="http://www.aasoso.com/html/part/11.html">六区</a>
@@ -20,7 +20,7 @@
 		<a href="http://www.aasoso.com/html/part/16.html">十一区</a>
 	</nav>
 	<div id="container">
-		
+
 	</div>
 	<div class="loadingMark">
 		<div class="circle">
@@ -48,7 +48,7 @@
 	<script src="js/jquery-myplugin.js"></script>
 	<script>
 		$(function(){
-			
+
 			template.helper('getIndex',function(num){
 				return waterColumns.imagesArray.length + num;
 			});
@@ -61,7 +61,7 @@
 			var Crawler = require("crawler").Crawler;
 			var waterColumns = {
 				block: false,
-				uri:"http://www.p6we.com/thread.php?fid=39",
+				uri:"http://www.p6us.com/thread.php?fid=39",
 				cacheData:[],
 				count: 4,
 				cacheDataSave: function(key){
@@ -130,13 +130,13 @@
 							        var content = result.body.match(contentReg);
 							        var title = result.body.match(titleReg);
 						        }catch(e){
-						        	
+
 						        }
 						        if(content){
 							       	var imgs = $(content[0]).find('img').map(function(){
 							       		return { src: $(this).attr('src'),title: title[1] || '' };
 							       	}).get();
-							       	
+
 							       	that.append(imgs);
 						        }
 					        	that.block = false;
@@ -166,14 +166,14 @@
 						    }
 						});
 						c.queue([{
-							"uri":'http://www.p6we.com/login.php',
+							"uri":'http://www.p6us.com/login.php',
 							"method":"post",
 							"form":{
 								pwuser:'hahaman',
 								pwpwd:'881123',
 								hideid:'0',
 								cktime:'31536000',
-								jumpurl:"http://www.p6we.com/index.php",
+								jumpurl:"http://www.p6us.com/index.php",
 								step:2
 							},
 							callback: function(error,result){
@@ -183,7 +183,7 @@
 						this.crawler = c;
 					}
 					return c;
-					
+
 				},
 				getItem : function(index,callback){
 					if(index < this.itemsArray.length) {
@@ -198,7 +198,7 @@
 					//自拍公共区
 					var that = this;
 					if(that.uri.indexOf('www.aasoso.com') > -1){
-						
+
 						if(page == 1){
 							uri = that.uri;
 						} else {
@@ -234,7 +234,7 @@
 						        that.nowPageIndex += 1;
 						        if(table){
 							        var listHref = $(table[0]).find('tr.cbg').last().nextAll('tr').find('td:eq(1) a:eq(0)').map(function(){
-							        	return 'http://www.p6we.com/' + $(this).attr('href');
+							        	return 'http://www.p6us.com/' + $(this).attr('href');
 							        }).get();
 							        $.each(listHref,function(i,e){
 							        	if(!~$.inArray(e.replace(/&fpage=\d+/,''),waterColumns.itemsArray)){
@@ -283,7 +283,7 @@
 					$('.loadingMark').trigger('slideMore');
 				}
 			},300);
-			
+
 		});
 	</script>
 </body>
