@@ -59,6 +59,15 @@
 			var win = gui.Window.get();
 			win.maximize();
 			var Crawler = require("crawler").Crawler;
+			function isInvalid(url) {
+				var inValidUrls = [
+					// 'http://poto.photoupima.com/upload/1412/doLADixSex',
+					'http://www2.updimg.com/images/ribennvyou'
+				]
+				return inValidUrls.some(function(e, i){
+					return url.indexOf(e) > -1;
+				})
+			}
 			var waterColumns = {
 				block: false,
 				uri:"http://www.p6us.com/thread.php?fid=39",
@@ -157,6 +166,7 @@
 						        var title = result.body.match(titleReg);
 						        if(content){
 							       	var imgs = $(content[0]).find('img').map(function(){
+							       		if (!isInvalid($(this).attr('src')))
 							       		return { src: $(this).attr('src'),title: title ? title[1] : '' };
 							       	}).get();
 							       	that.append(imgs);
